@@ -179,6 +179,6 @@ public class LogManager {
 	}
 
 	public void workErrorEnd(String methodName) {
-		info("I0000002", methodName, true);
+		info("I0000003", methodName, true);
 	}
 }

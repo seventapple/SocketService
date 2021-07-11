@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="jar" name="LogAndProperty">
+	<property file="build.properties" />
+	<property name="build.path" value="${build.dir}/${package.artifactId}" />
+	<tstamp>
+		<format property="BUILD_TIME" pattern="${build.time.format}" />
+	</tstamp>
+	<target name="jar" depends="build">
+		<delete file="${build.path}.jar" />
+		<buildnumber />
+		<jar destfile="${build.path}.jar">
+			<manifest>
+				<attribute name="Main-Class" value="com.wang.common.VersionInfo" />
+				<attribute name="package-artifactId" value="${package.artifactId}" />
+				<attribute name="package-groupId" value="${package.groupId}" />
+				<attribute name="package-version" value="${package.version}/${build.number}" />
+				<attribute name="package-buildDate" value="${BUILD_TIME}" />
+				<attribute name="package-description" value="${package.description}" />
+				<attribute name="package-classType" value="class" />
+			</manifest>
+			<fileset dir="bin" includes="**/*.*">
+			</fileset>
+		</jar>
+	</target>
+	<property environment="env" />
+	<property name="ECLIPSE_HOME" value="D:/eclipse/eclipse-jee-2019-06-R-win32-x86_64/eclipse/" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.8" />
+	<property name="source" value="1.8" />
+	<path id="LogAndProperty.classpath">
+		<pathelement location="bin" />
+		<pathelement location="lib/slf4j-api-1.7.25.jar" />
+		<pathelement location="lib/logback-classic-1.1.11.jar" />
+		<pathelement location="lib/logback-core-1.1.11.jar" />
+		<pathelement location="lib/jackson-annotations-2.9.9.jar" />
+		<pathelement location="lib/jackson-core-2.9.9.jar" />
+		<pathelement location="lib/jackson-databind-2.9.9.jar" />
+	</path>
+	<target name="init">
+		<mkdir dir="bin" />
+		<copy includeemptydirs="false" todir="bin">
+			<fileset dir="src">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+	<target name="clean">
+		<delete dir="bin" />
+	</target>
+	<target depends="clean" name="cleanall" />
+	<target depends="build-subprojects,build-project" name="build" />
+	<target name="build-subprojects" />
+	<target depends="init" name="build-project">
+		<echo message="${ant.project.name}: ${ant.file}" />
+		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+			<src path="src" />
+			<classpath refid="LogAndProperty.classpath" />
+		</javac>
+	</target>
+	<target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects" />
+	<target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+		<copy todir="${ant.library.dir}">
+			<fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar" />
+		</copy>
+		<unzip dest="${ant.library.dir}">
+			<patternset includes="jdtCompilerAdapter.jar" />
+			<fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar" />
+		</unzip>
+	</target>
+	<target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+		<property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter" />
+		<antcall target="build" />
+	</target>
+	<target name="Client (3)">
+		<java classname="com.wang.startup.Client" failonerror="true" fork="yes">
+			<classpath refid="LogAndProperty.classpath" />
+		</java>
+	</target>
+	<target name="StartUp">
+		<java classname="com.wang.startup.StartUp" failonerror="true" fork="yes">
+			<classpath refid="LogAndProperty.classpath" />
+		</java>
+	</target>
+</project>

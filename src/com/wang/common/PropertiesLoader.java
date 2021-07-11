@@ -57,7 +57,7 @@ public class PropertiesLoader {
 		if (StringUtil.isNull(value))
 			return ret;
 		try {
-			ret = Integer.valueOf(key).intValue();
+			ret = Integer.valueOf(value).intValue();
 		} catch (Exception e) {
 			return defaultValue;
 		}

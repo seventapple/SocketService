@@ -14,4 +14,5 @@ public class Constants {
 	public static final String ENCOD_UTF8 = "UTF-8";
 
 	public static final String ERROR_PROPERTY_NOT_EXI = "E0001001";
+	public static final String ERROR_SYSTEM = "E0000002";
 }
