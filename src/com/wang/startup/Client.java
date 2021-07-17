@@ -33,11 +33,18 @@ public class Client {
 			// length
 			dos.writeInt(bytes.length);
 			dos.write(bytes);
+			byte[] data = new byte[1024];
+			int len;
+			while ((len = fis.read(data)) != -1) {
+				dos.write(data, 0, len);
+			}
+			System.out.println("close client's os.");
 			client.shutdownOutput();
 			// return msg
 			boolean isFinish = false;
 			while (!isFinish) {
 				String ret = dis.readUTF();
+				System.out.println(ret);
 				if ("200".equals(ret)) {
 					isFinish = true;
 					System.out.println("success");

@@ -29,6 +29,7 @@ public class SocketAlive implements Runnable {
 				} catch (IOException e) {
 					isRunning = false;
 				}
+				lastReceiveTime=getTime();
 			} else {
 				try {
 					Thread.sleep(keepAliveDelay);
