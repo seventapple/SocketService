@@ -13,7 +13,7 @@
 		</rollingPolicy>
 		<encoder>
 			<charset>UTF-8</charset>
-			<pattern>%-5r %d{yyyyMMdd HH:mm:ss.SSS}[%t]%-5le %X{class} - %msg %n
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}[%t]%-5le %X{class} - %msg %n
 			</pattern>
 		</encoder>
 	</appender>

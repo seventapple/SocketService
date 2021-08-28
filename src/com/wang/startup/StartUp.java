@@ -21,9 +21,12 @@ public class StartUp {
 	}
 
 	public void start() {
-		LOG.workStart("PROCESS_NAME");
+		LOG.info("I0000004",null,false);
 		try (Scanner sc = new Scanner(System.in)) {
-			WorkManager.getInstance().init(getThreadCount());
+			String ret = WorkManager.getInstance().init(getThreadCount());
+			if (ret != Constants.RESULT_SUCCESS) {
+				return;
+			}
 			String msg = null;
 			while (isRunning) {
 				msg = sc.nextLine();
@@ -34,12 +37,12 @@ public class StartUp {
 					try {
 						Thread.sleep(2000);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						;
 					}
 				}
 			}
 		} finally {
-			LOG.workNormalEnd("PROCESS_NAME");
+			LOG.info("I0000005",null,false);
 		}
 	}
 
@@ -51,6 +54,7 @@ public class StartUp {
 		} catch (CtrFileException e) {
 			cnt = 11253;
 		}
+		LOG.debug("thread count : "+cnt);
 		return cnt;
 	}
 }

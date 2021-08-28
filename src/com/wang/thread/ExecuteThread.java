@@ -3,13 +3,11 @@ package com.wang.thread;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.Thread.State;
 import java.net.Socket;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.wang.common.Constants;
 import com.wang.common.StringUtil;
 import com.wang.control.WorkManager;
@@ -60,7 +58,7 @@ public class ExecuteThread implements Runnable {
 				info = getRequestInfo();
 				if (info == null) {
 					LOG.error("info format error");
-					return;
+					continue;
 				}
 				if (EXECUTE_TYPE.ADD.equals(info.getMethod())) {
 					doAdd(info);
@@ -68,7 +66,7 @@ public class ExecuteThread implements Runnable {
 					doDelete(info);
 				} else {
 					LOG.error("input method error");
-					return;
+					continue;
 				}
 				resultError = false;
 			} catch (Exception e) {

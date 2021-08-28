@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import com.wang.common.Constants;
 import com.wang.thread.ExecuteThread;
 import com.wang.thread.Monitor;
 
@@ -45,18 +46,31 @@ public class WorkManager {
 	/**
 	 * 启动生产者消费者
 	 */
-	public void init(int cnt) {
+	public String init(int cnt) {
 		executorService = Executors.newFixedThreadPool(cnt);
 
+		String[] monitorRet = new String[2];
 		// 生产者启动
-		monitor = new Monitor();
+		monitor = new Monitor(monitorRet);
 		new Thread(monitor).start();
+
+		while (monitorRet[0] == null) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				;
+			}
+		}
+		if (monitorRet[0] != Constants.RESULT_SUCCESS) {
+			return Constants.RESULT_ERROR;
+		}
 
 		threadSetting(cnt);
 		// 消费者线程启动
 		for (ExecuteThread thread : execThreadList) {
 			executorService.submit(thread);
 		}
+		return Constants.RESULT_SUCCESS;
 	}
 
 	/**

@@ -19,6 +19,12 @@ public class Monitor implements Runnable {
 
 	private ServerSocket monitor;
 
+	private String[] param;
+
+	public Monitor(String[] param) {
+		this.param = param;
+	}
+
 	@Override
 	public void run() {
 		exec();
@@ -28,6 +34,7 @@ public class Monitor implements Runnable {
 		LOG.workStart("SOCKET_MONITOR");
 		try {
 			monitor = new ServerSocket(getPort());
+			param[0] = Constants.RESULT_SUCCESS;
 			while (isRunning) {
 				Socket accept = null;
 				try {
@@ -39,8 +46,14 @@ public class Monitor implements Runnable {
 				}
 				WorkManager.getInstance().pushQueue(accept);
 			}
+			LOG.workNormalEnd("SOCKET_MONITOR");
 		} catch (Throwable e) {
+			LOG.workErrorEnd("SOCKET_MONITOR");
 			LOG.error(Constants.ERROR_SYSTEM, e);
+			param[0] = Constants.RESULT_ERROR;
+			if (!Thread.currentThread().isInterrupted()) {
+				Thread.currentThread().interrupt();
+			}
 		}
 	}
 
@@ -63,7 +76,7 @@ public class Monitor implements Runnable {
 		} catch (CtrFileException e) {
 			port = 11253;
 		}
-//		LOG.debug("port : " + port);
+		LOG.debug("port : " + port);
 		return port;
 	}
 }

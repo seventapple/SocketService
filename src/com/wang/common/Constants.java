@@ -15,4 +15,7 @@ public class Constants {
 
 	public static final String ERROR_PROPERTY_NOT_EXI = "E0001001";
 	public static final String ERROR_SYSTEM = "E0000002";
+	
+	public static final String RESULT_SUCCESS = "0";
+	public static final String RESULT_ERROR = "-1";
 }
