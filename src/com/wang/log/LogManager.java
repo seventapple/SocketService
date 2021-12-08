@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.slf4j.event.Level;
-
 import com.wang.common.Constants;
 import com.wang.common.LogMessageDictionary;
 import com.wang.common.StringUtil;
@@ -33,6 +32,7 @@ public class LogManager {
 				throw new IOException("");
 			} else {
 				LoggerContext logbackContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+//				LoggerContext logbackContext = (LoggerContext) StaticLoggerBinder.getSingleton().getLoggerFactory();
 				JoranConfigurator joranConfig = new JoranConfigurator();
 				joranConfig.setContext(logbackContext);
 				logbackContext.reset();
@@ -114,7 +114,7 @@ public class LogManager {
 	public void info(String id, String args, boolean keyFlg) {
 		if (keyFlg)
 			args = LogMessageDictionary.getMsg(args);
-		info(LogMessageDictionary.getMsg(id, new Object[] { args }));
+		info(LogMessageDictionary.getMsg(id, args));
 	}
 
 	public void warn(String id, Object... args) {

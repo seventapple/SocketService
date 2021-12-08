@@ -1,13 +1,19 @@
 package com.wang.thread;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.lang.Thread.State;
 import java.net.Socket;
+import java.net.URLDecoder;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.wang.common.Constants;
 import com.wang.common.StringUtil;
 import com.wang.control.WorkManager;
@@ -62,8 +68,10 @@ public class ExecuteThread implements Runnable {
 				}
 				if (EXECUTE_TYPE.ADD.equals(info.getMethod())) {
 					doAdd(info);
-				} else if (EXECUTE_TYPE.ADD.equals(info.getMethod())) {
+				} else if (EXECUTE_TYPE.DELETE.equals(info.getMethod())) {
 					doDelete(info);
+				} else if (EXECUTE_TYPE.SAVE.equals(info.getMethod())) {
+					doSave(info);
 				} else {
 					LOG.error("input method error");
 					continue;
@@ -128,11 +136,43 @@ public class ExecuteThread implements Runnable {
 		}
 	}
 
+	private void doSave(RequestInfo info) throws Exception {
+		String methodName = "doSave";
+		LOG.methodStart(methodName);
+		try (BufferedWriter bw = new BufferedWriter(
+				new OutputStreamWriter(new FileOutputStream("E:/TestFile/IO/1.txt"), "utf-8"));) {
+//			// method-1
+//			byte[] data = new byte[128];
+//			int len;
+//			while ((len = dis.read(data)) != -1) {
+//				bw.write(URLDecoder.decode(new String(data, 0, len), "UTF-8"));
+//			}
+//			bw.flush();
+			StringBuilder strb = new StringBuilder();
+			byte[] data = new byte[128];
+			int len;
+			while ((len = dis.read(data)) != -1) {
+				strb.append(new String(data, 0, len));
+			}
+			String[] msgs = StringUtil.strToBean(strb.toString(), String[].class);
+			for (String msg : msgs) {
+				bw.write(msg);
+				bw.newLine();
+			}
+		} finally {
+			LOG.methodEnd(methodName);
+		}
+	}
+
 	private void doAdd(RequestInfo info) throws Exception {
 		String methodName = "doAdd";
 		LOG.methodStart(methodName);
 		try {
-			fos = new FileOutputStream(new File(info.getPath(), info.getName()).getCanonicalPath());
+			File file = new File(info.getPath());
+			if (!file.exists()) {
+				file.mkdirs();
+			}
+			fos = new FileOutputStream(new File(info.getPath(), info.getName()).getCanonicalFile());
 			byte[] data = new byte[1024];
 			int len;
 			while ((len = dis.read(data)) != -1) {
@@ -147,7 +187,8 @@ public class ExecuteThread implements Runnable {
 	private void doDelete(RequestInfo info) {
 		String methodName = "doDelete";
 		LOG.methodStart(methodName);
-		System.out.println(methodName);
+		File file = new File(info.getPath(), info.getName());
+		file.delete();
 		LOG.methodEnd(methodName);
 	}
 

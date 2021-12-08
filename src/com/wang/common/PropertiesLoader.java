@@ -19,7 +19,8 @@ public class PropertiesLoader {
 	public PropertiesLoader(String propertyFile) throws CtrFileException {
 		try {
 			String jarFilePath = getJavaLibraryPath(VersionInfo.getProduct() + ".jar", PropertiesLoader.class);
-			// (For eclipse run)jarFilePath = "src/resources";
+			// (For eclipse run)
+//			jarFilePath = "src/resources";
 			// System.out.println("PropertyFilePath:" + jarFilePath);
 			File tmp = null;
 			if (!StringUtil.isNull(jarFilePath)) {

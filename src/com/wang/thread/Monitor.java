@@ -77,6 +77,7 @@ public class Monitor implements Runnable {
 			port = 11253;
 		}
 		LOG.debug("port : " + port);
+//		System.out.println("port : " + port);
 		return port;
 	}
 }

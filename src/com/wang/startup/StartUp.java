@@ -21,7 +21,8 @@ public class StartUp {
 	}
 
 	public void start() {
-		LOG.info("I0000004",null,false);
+//		System.out.println("Start");
+		LOG.info("I0000004", null, false);
 		try (Scanner sc = new Scanner(System.in)) {
 			String ret = WorkManager.getInstance().init(getThreadCount());
 			if (ret != Constants.RESULT_SUCCESS) {
@@ -42,7 +43,8 @@ public class StartUp {
 				}
 			}
 		} finally {
-			LOG.info("I0000005",null,false);
+//			System.out.println("Finish");
+			LOG.info("I0000005", null, false);
 		}
 	}
 
@@ -52,9 +54,10 @@ public class StartUp {
 			PropertiesLoader loader = new PropertiesLoader(Constants.PROPERTIES_FILE);
 			cnt = loader.getProperty("threadCount", 5);
 		} catch (CtrFileException e) {
-			cnt = 11253;
+			cnt = 5;
 		}
-		LOG.debug("thread count : "+cnt);
+		LOG.debug("thread count : " + cnt);
+//		System.out.println("thread count : " + cnt);
 		return cnt;
 	}
 }
